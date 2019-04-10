@@ -1,0 +1,20 @@
+language: bash
+python:
+  - "3.6"
+git:
+  depth: 1
+
+stages:
+  - lint
+
+jobs:
+  include:
+    - stage: lint
+      name: lint
+      language: node_js
+      node_js: 8
+      install:
+        - npm install -g eclint
+        - eclint --version
+      script:
+        - eclint check

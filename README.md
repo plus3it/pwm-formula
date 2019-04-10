@@ -1,2 +1,2 @@
 # pwm-formula
-Salt formula to setup PWM
+Salt formula to install PWM
