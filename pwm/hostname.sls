@@ -14,3 +14,4 @@ ensure_self_in_hosts_file:
     - ip: {{ localip }}
     - names:
       - {{ fqdn }}
+    - clean: True

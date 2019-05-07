@@ -1,17 +1,17 @@
 #!/bin/bash
 #
 # Description:
-#    This script is intended to manage the lifecycle of user accounts imported 
+#    This script is intended to manage the lifecycle of user accounts imported
 #    from IAM.
-#    If users from the required parameter IAM group don't exist on the system, 
-#    the script creates them.  If users exist on the instance from a previous 
-#    script run but do not exist in the defined IAM group, the script deletes 
+#    If users from the required parameter IAM group don't exist on the system,
+#    the script creates them.  If users exist on the instance from a previous
+#    script run but do not exist in the defined IAM group, the script deletes
 #    them.
-#    The use of an attached instance role with proper policy to query the IAM 
+#    The use of an attached instance role with proper policy to query the IAM
 #    group members is required.
 #    This script is intended to be paired with the use of an SSHd
 #    AuthorizedKeysCommand setting to enable SSH key access.
-#    This script configures the created users to be able to run only specific 
+#    This script configures the created users to be able to run only specific
 #    sudo commands required for ServiceNow Discovery
 #    ref - https://docs.servicenow.com/bundle/kingston-it-operations-management/page/product/discovery/reference/r_SSHCredentialsForm.html#r_SSHCredentialsForm
 #
@@ -39,7 +39,7 @@ usage()
   Usage:  ${__ScriptName} [options]
 
   Note:
-  If 
+  If
 
   Options:
   -h  Display this message.
@@ -80,16 +80,16 @@ if ! [ "$(command -v aws)" ]; then
 fi
 # If usermgmt wasn't previously executed to create ${Type}lastimportsshusers.log, create blank file for future comparison
 if [ -e "/usr/local/bin/${Type}lastimportsshusers.log" ]
-   then echo "${Type}lastimportsshusers.log exists" > /dev/null
+    then echo "${Type}lastimportsshusers.log exists" > /dev/null
 else
-   touch /usr/local/bin/"${Type}"lastimportsshusers.log 
-   echo "" > /usr/local/bin/"${Type}"lastimportsshusers.log
+    touch /usr/local/bin/"${Type}"lastimportsshusers.log
+    echo "" > /usr/local/bin/"${Type}"lastimportsshusers.log
 fi
 #query IAM and create file of current members of group
 aws iam get-group --group-name "${GROUP_NAME}" --query "Users[].[UserName]" --output text > /usr/local/bin/"${Type}"importsshusers.log 2>&1
 chmod 600 /usr/local/bin/"${Type}"importsshusers.log
 if [ $? -eq 255 ]; then
-  die "${__ScriptName} aws cli failure - possible issue; cli configuration or EC2 Instance role not setup with proper credentials or policy"
+    die "${__ScriptName} aws cli failure - possible issue; cli configuration or EC2 Instance role not setup with proper credentials or policy"
 fi
 #create sorted files for use with comm
 sort < /usr/local/bin/"${Type}"lastimportsshusers.log > /usr/local/bin/"${Type}"lastimportsshusers.sorted.log
@@ -103,31 +103,31 @@ comm -13 /usr/local/bin/"${Type}"importsshusers.sorted.log /usr/local/bin/"${Typ
 #create new users with locked password for ssh and add to sudoers.d folder
 while read User
 do
-  if id -u "$User" > /dev/null 2>&1; then
-    echo "$User exists"
-  else
-    /usr/sbin/adduser "$User"
-    passwd -l "$User"
-    if [ $? -eq 0 ]; then
-    (
-      printf "%s ALL=(root) NOPASSWD: /usr/sbin/dmidecode\n" "$User"
-      printf "%s ALL=(root) NOPASSWD: /usr/sbin/lsof\n" "$User"
-      printf "%s ALL=(root) NOPASSWD: /usr/sbin/fdisk -l\n" "$User"
-      printf "%s ALL=(root) NOPASSWD: /usr/sbin/dmsetup table *\n" "$User"
-      printf "%s ALL=(root) NOPASSWD: /usr/sbin/dmsetup ls\n" "$User"
-      printf "%s ALL=(root) NOPASSWD: /usr/sbin/multipath -ll\n" "$User"
-    ) > "/etc/sudoers.d/$User"
-      log "User $User created by ${__ScriptName}"
+    if id -u "$User" > /dev/null 2>&1; then
+        echo "$User exists"
+    else
+        /usr/sbin/adduser "$User"
+        passwd -l "$User"
+        if [ $? -eq 0 ]; then
+        (
+            printf "%s ALL=(root) NOPASSWD: /usr/sbin/dmidecode\n" "$User"
+            printf "%s ALL=(root) NOPASSWD: /usr/sbin/lsof\n" "$User"
+            printf "%s ALL=(root) NOPASSWD: /usr/sbin/fdisk -l\n" "$User"
+            printf "%s ALL=(root) NOPASSWD: /usr/sbin/dmsetup table *\n" "$User"
+            printf "%s ALL=(root) NOPASSWD: /usr/sbin/dmsetup ls\n" "$User"
+            printf "%s ALL=(root) NOPASSWD: /usr/sbin/multipath -ll\n" "$User"
+        ) > "/etc/sudoers.d/$User"
+            log "User $User created by ${__ScriptName}"
+        fi
     fi
-  fi
 done < /usr/local/bin/"${Type}"sshuserstocreate.log
 #delete users not in IAM group
 while read User
 do
     /usr/sbin/userdel -r "$User"
     if [ $? -ne 6 ]; then
-      rm /etc/suoders.d/"$User"
-      log "User $User deleted by ${__ScriptName}"
+        rm /etc/suoders.d/"$User"
+        log "User $User deleted by ${__ScriptName}"
     fi
 done < /usr/local/bin/"${Type}"sshuserstodelete.log
 shred -u /usr/local/bin/"${Type}"sshuserstodelete.log

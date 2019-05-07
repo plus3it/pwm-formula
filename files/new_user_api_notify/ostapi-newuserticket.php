@@ -22,7 +22,7 @@ $config = array(
 if($config['url'] === 'http://your.domain.tld/api/tickets.json') {
     echo "<p style=\"color:red;\"><b>Error: No URL</b><br>You have not configured this script with your URL!</p>";
     echo "Please edit this file ".__FILE__." and add your URL at line 18.</p>";
-    die();  
+    die();
 }
 
 if(IsNullOrEmptyString($config['key']) || ($config['key'] === 'PUTyourAPIkeyHERE'))  {
@@ -33,7 +33,7 @@ if(IsNullOrEmptyString($config['key']) || ($config['key'] === 'PUTyourAPIkeyHERE
 }
 
 # Fill in the data for the new ticket, this will likely come from $_POST.
-# NOTE: your variable names in osT are case sensiTive. 
+# NOTE: your variable names in osT are case sensiTive.
 # So when adding custom lists or fields make sure you use the same case
 
 $message = '<html><body style="font-family: Helvetica, Arial, san-serif; font-size:12pt;"><p>';
@@ -48,7 +48,7 @@ $data = array(
     'email'     =>      "{{ salt.pillar.get('pwm:lookup:emailfrompwm') }}",  // from email aka User/Client Email
     'subject'   =>      "NEW USER: __username__ created an account in {{ salt.pillar.get('pwm:lookup:envirname') }}",  // test subject, aka Issue Summary
     'message'   =>      "data:text/html;charset=utf-8,$message",
-    'topicId'   =>      '1', // the help Topic that you want to use for the ticket 
+    'topicId'   =>      '1', // the help Topic that you want to use for the ticket
     'attachments' => array()
 );
 

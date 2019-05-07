@@ -23,10 +23,9 @@ api_start_crond_service:
     - name: crond
     - enable: True
 
-add_watchnewuser-api_cronjob:
-  file.append:
-    - name: /etc/crontab
-    - text: |
-        */1 * * * * root /usr/local/bin/watchnewuser-api.sh
-        
+/etc/crontab:
+  cron.present:
+    - name: /usr/local/bin/watchnewuser-api.sh
+    - minute: "*/1"
+    - identifier: watchnewuser
 {% endif %}

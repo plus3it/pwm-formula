@@ -5,6 +5,5 @@ include:
   - pwm.install_pwm
   - pwm.configfile
   - pwm.ad_notify_passwd_expire
-  - pwm.new_user_email_notify
   - pwm.new_user_api_notify
   - pwm.customization

@@ -23,9 +23,12 @@ execute_env_adjust:
   cmd.run:
     - name: /usr/local/bin/ad-password-expire-notify/envadjust.sh
 
-create_daily_notify_cronjob:
-  cmd.run:
-    - name: export OUPATH="{{ salt.pillar.get('pwm:lookup:oupath') }}" && eval echo '0 12 \* \* \* root /usr/bin/php /usr/local/bin/ad-password-expire-notify/check_expire.php -o \"${OUPATH}\"' > /etc/cron.d/ad-password-expire-notify
+/etc/cron.d/ad-password-expire-notify:
+  cron.present:
+    - name: /usr/bin/php /usr/local/bin/ad-password-expire-notify/check_expire.php -o \"${OUPATH}\"
+    - minute: 0
+    - hour: 12
+    - identifier: inotify-job
 
 daily_notify_cron_mode:
   file.managed:
