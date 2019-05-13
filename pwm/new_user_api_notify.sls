@@ -1,4 +1,4 @@
-{%- if salt.pillar.get('pwm:lookup:new_user_api_notify') == 1 %}
+{%- if salt.pillar.get('pwm:lookup:new_user_api_notify') %}
 new_user_notifiy_pkginstall:
   pkg.installed:
     - names:

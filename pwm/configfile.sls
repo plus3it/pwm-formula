@@ -1,6 +1,8 @@
 get_pwm_config:
-  cmd.run:
-    - name: aws s3 cp s3://{{ salt.pillar.get('pwm:lookup:config_bucket') }}/PwmConfiguration.xml /usr/share/tomcat/webapps/ROOT/WEB-INF/PwmConfiguration.xml
+  file.managed:
+    - name: /usr/share/tomcat/webapps/ROOT/WEB-INF/PwmConfiguration.xml
+    - source: https://s3.amazonaws.com/{{ salt.pillar.get('pwm:lookup:config_bucket') }}/PwmConfiguration.xml
+    - source_hash: https://s3.amazonaws.com/{{ salt.pillar.get('pwm:lookup:config_bucket') }}/PwmConfiguration.xml.sha1
 
 change_pwm_config_owner:
   file.managed:
@@ -11,8 +13,10 @@ change_pwm_config_owner:
     - replace: False
 
 get_sasl_password:
-  cmd.run:
-    - name: aws s3 cp s3://{{ salt.pillar.get('pwm:lookup:config_bucket') }}/sasl_passwd /etc/postfix/sasl_passwd
+  file.managed:
+    - name: /etc/postfix/sasl_passwd
+    - source: https://s3.amazonaws.com/{{ salt.pillar.get('pwm:lookup:config_bucket') }}/sasl_passwd
+    - source_hash: https://s3.amazonaws.com/{{ salt.pillar.get('pwm:lookup:config_bucket') }}/sasl_passwd.md5
 
 change_sasl_permissions:
   file.managed:
@@ -52,8 +56,10 @@ execute_inotify_script:
     - name: at now + 20 minutes -f /usr/local/bin/inotifypwmconfig.sh
 
 get_postfix_config_script:
-  cmd.run:
-    - name: aws s3 cp s3://{{ salt.pillar.get('pwm:lookup:config_bucket') }}/postfix_conf.sh /usr/local/bin/postfix_conf.sh
+  file.managed:
+    - name: /usr/local/bin/postfix_conf.sh
+    - source: https://s3.amazonaws.com/{{ salt.pillar.get('pwm:lookup:config_bucket') }}/postfix_conf.sh
+    - source_hash: https://s3.amazonaws.com/{{ salt.pillar.get('pwm:lookup:config_bucket') }}/postfix_conf.sh.sha1
 
 change_postfix_config_permissions:
   file.managed:

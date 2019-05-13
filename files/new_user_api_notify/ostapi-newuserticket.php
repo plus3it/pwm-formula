@@ -15,7 +15,7 @@ $debug="0";
 // You must configure the url and key in the array below.
 $config = array(
     'url'=> "{{ salt.pillar.get('pwm:lookup:osturl') }}/api/http.php/tickets.json",  // URL to site.tld/api/tickets.json
-    'key'=> "{{ salt.pillar.get('pwm:lookup:ostapikey') }}"  // API Key goes here
+    'key'=> '{{ salt.pillar.get("pwm:lookup:ostapikey") }}'  // API Key goes here
 );
 # NOTE: some people have reported having to use "http://your.domain.tld/api/http.php/tickets.json" instead.
 
@@ -40,7 +40,7 @@ $message = '<html><body style="font-family: Helvetica, Arial, san-serif; font-si
 $message .= "Someone just created a new {{ salt.pillar.get('pwm:lookup:envirname') }} account that needs approval.<br>";
 $message .= 'The following new account was created:<br><br>';
 $message .= '__username__ created an account at __time__ GMT from the following IP address: __ip__<br><br> ';
-$message .= 'The account is currently disabled, please confirm the account justification with the account manager, enable the account, and send the new user the appropriate notification.<br><br>';
+$message .= 'The account is enabled but in the AwaitingVerification OU, please confirm the account justification with the account manager, move the account to the Users OU, and send the new user the appropriate notification.<br><br>';
 $message .= 'Note - Ticket created via API from PWM.</p>';
 
 $data = array(

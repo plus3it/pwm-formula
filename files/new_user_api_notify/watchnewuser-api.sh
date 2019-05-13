@@ -28,7 +28,7 @@ if test "$newuserentries" != "" && test "$newusers" = ""
 then
     log "should not see this log-diff of temp files isn't comparing correctly to actual log of new users"
 elif test "$newuserentries" != ""
-the
+then
     #count new entries and collect json key value pairs from log entry
     echo "$newuserentries" > /usr/local/bin/newuserentries
     diffcount=$(wc -l < /usr/local/bin/newuserentries)

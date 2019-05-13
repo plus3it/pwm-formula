@@ -16,9 +16,9 @@ install_packages:
       - python-setuptools
       - python2-pip
 
-#install_aws_cli:
-#  pip.installed:
-#    - name: awscli
+install_aws_cli:
+  pip.installed:
+    - name: awscli
 
 remove_unused_packages:
   pkg.removed:
@@ -27,8 +27,10 @@ remove_unused_packages:
       - ntpdate
 
 retrieve_war_file:
-  cmd.run:
-    - name: aws s3 cp s3://{{ salt.pillar.get('pwm:lookup:config_bucket') }}/pwm18.war /usr/share/tomcat/webapps/ROOT.war
+  file.managed:
+    - name: /usr/share/tomcat/webapps/ROOT.war
+    - source: s3://{{ salt.pillar.get('pwm:lookup:config_bucket') }}/pwm18.war
+    - source_hash: s3://{{ salt.pillar.get('pwm:lookup:config_bucket') }}/pwm18.war.sha1
 
 change_war_file_ownership:
   file.managed:
