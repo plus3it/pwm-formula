@@ -1,42 +1,25 @@
 get_pwm_config:
   file.managed:
     - name: /usr/share/tomcat/webapps/ROOT/WEB-INF/PwmConfiguration.xml
-    - source: https://s3.amazonaws.com/{{ salt.pillar.get('pwm:lookup:config_bucket') }}/PwmConfiguration.xml
-    - source_hash: https://s3.amazonaws.com/{{ salt.pillar.get('pwm:lookup:config_bucket') }}/PwmConfiguration.xml.sha1
-
-change_pwm_config_owner:
-  file.managed:
-    - name: /usr/share/tomcat/webapps/ROOT/WEB-INF/PwmConfiguration.xml
-    - user: tomcat
+    - source: s3://{{ salt.pillar.get('pwm:lookup:config_bucket') }}/PwmConfiguration.xml
+    - skip_verify: True
+    - user: tomcat    
     - group: tomcat
     - mode: 600
-    - replace: False
 
 get_sasl_password:
   file.managed:
     - name: /etc/postfix/sasl_passwd
-    - source: https://s3.amazonaws.com/{{ salt.pillar.get('pwm:lookup:config_bucket') }}/sasl_passwd
-    - source_hash: https://s3.amazonaws.com/{{ salt.pillar.get('pwm:lookup:config_bucket') }}/sasl_passwd.md5
-
-change_sasl_permissions:
-  file.managed:
-    - name: /etc/postfix/sasl_passwd
+    - source: s3://{{ salt.pillar.get('pwm:lookup:config_bucket') }}/sasl_passwd
+    - skip_verify: True
     - mode: 600
-    - replace: False
-
-stop_tomcat_service:
-  service.dead:
-    - name: tomcat
-
-sleep_before_restarting_tomcat:
-  cmd.run:
-    - name: sleep 3
 
 config_start_tomcat_service:
   service.running:
     - name: tomcat
     - enable: True
     - reload: True
+    - init_delay: 3
 
 create_pwm_config_mgmt_script:
   file.managed:
@@ -58,18 +41,9 @@ execute_inotify_script:
 get_postfix_config_script:
   file.managed:
     - name: /usr/local/bin/postfix_conf.sh
-    - source: https://s3.amazonaws.com/{{ salt.pillar.get('pwm:lookup:config_bucket') }}/postfix_conf.sh
-    - source_hash: https://s3.amazonaws.com/{{ salt.pillar.get('pwm:lookup:config_bucket') }}/postfix_conf.sh.sha1
-
-change_postfix_config_permissions:
-  file.managed:
-    - name: /usr/local/bin/postfix_conf.sh
+    - source: s3://{{ salt.pillar.get('pwm:lookup:config_bucket') }}/postfix_conf.sh
+    - skip_verify: True
     - mode: 700
-    - replace: False
-
-temporary_sleep_for_postfix:
-  cmd.run:
-    - name: sleep 5
 
 execute_postfix_config_script:
   cmd.run:
@@ -80,8 +54,10 @@ postmap_sasl:
     - name: postmap /etc/postfix/sasl_passwd
 
 selinux_java_tolcl_postfix:
-  cmd.run:
-    - name: setsebool -P nis_enabled 1
+  selinux.boolean:
+    - name: nis_enabled
+    - value: True
+    - persist: True
 
 start_postfix_service:
   service.running:

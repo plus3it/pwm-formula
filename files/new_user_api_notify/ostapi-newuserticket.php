@@ -37,7 +37,7 @@ if(IsNullOrEmptyString($config['key']) || ($config['key'] === 'PUTyourAPIkeyHERE
 # So when adding custom lists or fields make sure you use the same case
 
 $message = '<html><body style="font-family: Helvetica, Arial, san-serif; font-size:12pt;"><p>';
-$message .= "Someone just created a new {{ salt.pillar.get('pwm:lookup:envirname') }} account that needs approval.<br>";
+$message .= 'Someone just created a new {{ salt.pillar.get("pwm:lookup:envirname") }} account that needs approval.<br>';
 $message .= 'The following new account was created:<br><br>';
 $message .= '__username__ created an account at __time__ GMT from the following IP address: __ip__<br><br> ';
 $message .= 'The account is enabled but in the AwaitingVerification OU, please confirm the account justification with the account manager, move the account to the Users OU, and send the new user the appropriate notification.<br><br>';
@@ -45,9 +45,9 @@ $message .= 'Note - Ticket created via API from PWM.</p>';
 
 $data = array(
     'name'      =>      'The PWM via API',  // from name aka User/Client Name
-    'email'     =>      "{{ salt.pillar.get('pwm:lookup:emailfrompwm') }}",  // from email aka User/Client Email
-    'subject'   =>      "NEW USER: __username__ created an account in {{ salt.pillar.get('pwm:lookup:envirname') }}",  // test subject, aka Issue Summary
-    'message'   =>      "data:text/html;charset=utf-8,$message",
+    'email'     =>      '{{ salt.pillar.get("pwm:lookup:emailfrompwm") }}',  // from email aka User/Client Email
+    'subject'   =>      'NEW USER: __username__ created an account in {{ salt.pillar.get("pwm:lookup:envirname") }}',  // test subject, aka Issue Summary
+    'message'   =>      'data:text/html;charset=utf-8,$message',
     'topicId'   =>      '1', // the help Topic that you want to use for the ticket
     'attachments' => array()
 );

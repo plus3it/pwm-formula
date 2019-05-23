@@ -16,9 +16,9 @@ install_packages:
       - python-setuptools
       - python2-pip
 
-install_aws_cli:
-  pip.installed:
-    - name: awscli
+#install_aws_cli:
+#  pip.installed:
+#    - name: awscli
 
 remove_unused_packages:
   pkg.removed:
@@ -30,7 +30,7 @@ retrieve_war_file:
   file.managed:
     - name: /usr/share/tomcat/webapps/ROOT.war
     - source: s3://{{ salt.pillar.get('pwm:lookup:config_bucket') }}/pwm18.war
-    - source_hash: s3://{{ salt.pillar.get('pwm:lookup:config_bucket') }}/pwm18.war.sha1
+    - skip_verify: True
 
 change_war_file_ownership:
   file.managed:
@@ -44,10 +44,6 @@ start_tomcat_service:
     - name: tomcat
     - enable: True
     - reload: True
-
-sleep_ten_seconds:
-  cmd.run:
-    - name: sleep 10
 
 restart_tomcat_service:
   service.running:
@@ -70,15 +66,15 @@ start_atd_service:
     - name: atd
     - enable: True
 
-create_selinuxproxy_script:
-  file.managed:
-    - name: /usr/local/bin/selinuxproxy.sh
-    - source: salt://files/install_pwm/selinuxproxy.sh
-    - mode: 744
-
-execute_selinuxproxy_script:
+{%- if salt.selinux.getenforce() in ['Enforcing', 'Permissive'] %}
+chcon_selinuxproxy:
   cmd.run:
-    - name: /usr/local/bin/selinuxproxy.sh
+    - name: chcon -R --reference=/usr/share/tomcat/webapps /usr/share/tomcat/webapps/ROOT.war
+  selinux.boolean:
+    - name: httpd_can_network_relay
+    - value: True
+    - persist: True
+{% endif %}
 
 pwm_app_path:
   file.blockreplace:
