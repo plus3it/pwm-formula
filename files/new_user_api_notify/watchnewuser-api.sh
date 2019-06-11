@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Script that will grep a log file and run a php script when a specified pattern is encountered.
 __ScriptName="watchnewuser-api.sh"
 
@@ -33,14 +33,17 @@ then
     echo "$newuserentries" > /usr/local/bin/newuserentries
     diffcount=$(wc -l < /usr/local/bin/newuserentries)
     count=$((diffcount-1))
-    while IFS="," read a b c foo; do echo $foo >> /usr/local/bin/onlyjson; done < /usr/local/bin/newuserentries
+    # shellcheck disable=SC2034,SC2086
+    while IFS="," read -r a b c foo; do echo $foo >> /usr/local/bin/onlyjson; done < /usr/local/bin/newuserentries
     cut -b 14- /usr/local/bin/onlyjson > /usr/local/bin/cleanjson
     #json keys differ in pwm18-targetID removed
+    # shellcheck disable=SC2002
     cat /usr/local/bin/cleanjson | jq '.perpetratorID, .timestamp, .sourceAddress' >> /usr/local/bin/prearray
+    # shellcheck disable=SC2039
     readarray -t myarray < /usr/local/bin/prearray
     #create html table snippets for email
     v=0
-    for (( c=1; c<=$count; c++ ))
+    for (( c=1; c<=count; c++ ))
     do
         cp /usr/local/bin/ostapi-newuserticket.php /usr/local/bin/ostapi-newuserticket$c.php
         __username__=${myarray[$v]}
@@ -50,10 +53,10 @@ then
         sed -i "s/__time__/$__time__/g" /usr/local/bin/ostapi-newuserticket$c.php
         sed -i "s/__ip__/$__ip__/g" /usr/local/bin/ostapi-newuserticket$c.php
         /usr/bin/php /usr/local/bin/ostapi-newuserticket$c.php
-        v=$[v+3]
+        v=$((v+3))
     done
     #cleanup for next run
-    for (( c=1; c<=$count; c++ ))
+    for (( c=1; c<=count; c++ ))
     do
         shred -u /usr/local/bin/ostapi-newuserticket$c.php
     done

@@ -37,9 +37,6 @@ usage()
     cat << EOT
   Usage:  ${__ScriptName} [options]
 
-  Note:
-  If
-
   Options:
   -h  Display this message.
   -G  The IAM group name from which to generate local users.
@@ -100,13 +97,14 @@ comm -23 /usr/local/bin/"${Type}"importsshusers.sorted.log /usr/local/bin/"${Typ
 #create file sshuserstodelete from list of items in discolastimportsshusers that aren't in discolastimportsshusers
 comm -13 /usr/local/bin/"${Type}"importsshusers.sorted.log /usr/local/bin/"${Type}"lastimportsshusers.sorted.log > /usr/local/bin/"${Type}"sshuserstodelete.log
 #create new users with locked password for ssh and add to sudoers.d folder
-while read User
+while read -r User
 do
     if id -u "$User" > /dev/null 2>&1; then
         echo "$User exists"
     else
         /usr/sbin/adduser "$User"
         passwd -l "$User"
+        # shellcheck disable=2181
         if [ $? -eq 0 ]; then
             echo "$User ALL=(ALL) NOPASSWD:ALL" > "/etc/sudoers.d/$User"
             log "User $User created by ${__ScriptName}"
@@ -114,7 +112,7 @@ do
     fi
 done < /usr/local/bin/"${Type}"sshuserstocreate.log
 #delete users not in IAM group
-while read User
+while read -r User
 do
     /usr/sbin/userdel -r "$User"
     if [ $? -ne 6 ]; then

@@ -16,9 +16,9 @@ install_packages:
       - python-setuptools
       - python2-pip
 
-#install_aws_cli:
-#  pip.installed:
-#    - name: awscli
+install_aws_cli:
+  pip.installed:
+    - name: awscli
 
 remove_unused_packages:
   pkg.removed:

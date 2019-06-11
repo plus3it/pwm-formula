@@ -47,7 +47,7 @@ $data = array(
     'name'      =>      'The PWM via API',  // from name aka User/Client Name
     'email'     =>      '{{ salt.pillar.get("pwm:lookup:emailfrompwm") }}',  // from email aka User/Client Email
     'subject'   =>      'NEW USER: __username__ created an account in {{ salt.pillar.get("pwm:lookup:envirname") }}',  // test subject, aka Issue Summary
-    'message'   =>      'data:text/html;charset=utf-8,$message',
+    'message'   =>      "data:text/html;charset=utf-8,$message", //the double quotes are so $message will be handled by php
     'topicId'   =>      '1', // the help Topic that you want to use for the ticket
     'attachments' => array()
 );
