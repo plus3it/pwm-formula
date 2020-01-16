@@ -1,15 +1,18 @@
 # sets up the iptables for the machine
 input_accept_policy:
   iptables.set_policy:
+    - name: input_accept_policy
     - chain: INPUT
     - policy: ACCEPT
 
 flush_input:
   iptables.flush:
+    - name: flush_input
     - chain: INPUT
 
 loopback_all:
   iptables.append:
+    - name: loopback_all
     - family: ipv4
     - chain: INPUT
     - jump: ACCEPT
@@ -18,6 +21,7 @@ loopback_all:
 
 all_conn_state:
   iptables.append:
+    - name: all_conn_state
     - chain: INPUT
     - match: state
     - connstate: RELATED,ESTABLISHED
@@ -25,6 +29,7 @@ all_conn_state:
 
 allow_ssh_all:
   iptables.append:
+    - name: allow_ssh_all
     - chain: INPUT
     - match: state
     - connstate: NEW
@@ -34,6 +39,7 @@ allow_ssh_all:
 
 dest_80_all:
   iptables.append:
+    - name: dest_80_all
     - family: ipv4
     - chain: INPUT
     - jump: ACCEPT
@@ -43,6 +49,7 @@ dest_80_all:
 
 dest_8080_all:
   iptables.append:
+    - name: dest_8080_all
     - family: ipv4
     - chain: INPUT
     - jump: ACCEPT
@@ -52,6 +59,7 @@ dest_8080_all:
 
 input_drop_policy:
   iptables.set_policy:
+    - name: input_drop_policy
     - chain: INPUT
     - policy: DROP
     - save: True

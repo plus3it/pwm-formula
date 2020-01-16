@@ -5,14 +5,14 @@ get_pwm_config:
     - skip_verify: True
     - user: tomcat
     - group: tomcat
-    - mode: 600
+    - mode: "0600"
 
 get_sasl_password:
   file.managed:
     - name: /etc/postfix/sasl_passwd
-    - source: salt://files/configfile/sasl_passwd.jinja
+    - source: salt://files/configure/sasl_passwd.jinja
     - template: jinja
-    - mode: 600
+    - mode: "0600"
 
 config_start_tomcat_service:
   service.running:
@@ -24,15 +24,15 @@ config_start_tomcat_service:
 create_pwm_config_mgmt_script:
   file.managed:
     - name: /usr/local/bin/pwmconfmgmt.sh
-    - source: salt://files/configfile/pwmconfmgmt.sh
+    - source: salt://files/configure/pwmconfmgmt.sh
     - template: jinja
-    - mode: 700
+    - mode: "0700"
 
 create_inotify_pwm_config_script:
   file.managed:
     - name: /usr/local/bin/inotifypwmconfig.sh
-    - source: salt://files/configfile/inotifypwmconfig.sh
-    - mode: 700
+    - source: salt://files/configure/inotifypwmconfig.sh
+    - mode: "0700"
 
 execute_inotify_script:
   cmd.run:
@@ -46,9 +46,9 @@ postfix_pkginstall:
 get_postfix_main_config:
   file.managed:
     - name: /etc/postfix/main.cf
-    - source: salt://files/configfile/main.jinja
+    - source: salt://files/configure/main.jinja
     - template: jinja
-    - mode: 700
+    - mode: "0700"
 
 postmap_sasl:
   cmd.run:
@@ -68,7 +68,7 @@ start_postfix_service:
 mv_admin_user_mgmt_file:
   file.managed:
     - name: /usr/local/bin/adminusermgmt.sh
-    - source: salt://files/configfile/adminusermgmt.sh
+    - source: salt://files/configure/adminusermgmt.sh
     - user: root
     - group: root
-    - mode: 700
+    - mode: "0700"

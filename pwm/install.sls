@@ -54,7 +54,7 @@ restart_tomcat_service:
 append_to_pwm.conf:
   file.append:
     - name: /etc/httpd/conf.d/pwm.conf
-    - source: salt://files/install_pwm/pwm.conf
+    - source: salt://files/install/pwm.conf
 
 start_httpd_service:
   service.running:
@@ -88,18 +88,18 @@ pwm_app_path:
 append_to_tomcat.conf:
   file.append:
     - name: /usr/share/tomcat/conf/tomcat.conf
-    - source: salt://files/install_pwm/tomcat.conf
+    - source: salt://files/install/tomcat.conf
 
 append_to_chrony.conf:
   file.append:
     - name: /etc/chrony.conf
-    - source: salt://files/install_pwm/chrony.conf
+    - source: salt://files/install/chrony.conf
 
 create_hostname_script:
   file.managed:
     - name: /usr/local/bin/rerunhostnamestate
-    - source: salt://files/install_pwm/rerunhostnamestate.sh
-    - mode: 744
+    - source: salt://files/install/rerunhostnamestate.sh
+    - mode: "0744"
 
 execute_hostname_state:
   cmd.run:

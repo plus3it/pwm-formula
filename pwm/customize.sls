@@ -1,9 +1,9 @@
 append_environment_welcome:
   file.append:
     - name: /usr/share/tomcat/webapps/ROOT/WEB-INF/jsp/fragment/envwelcome.jsp
-    - source: salt://files/customization/envwelcome.jsp
+    - source: salt://files/customize/envwelcome.jsp
 
-{% set myvar = 42%}
+{% set myvar = 42 %}
 addenvtexttologin-{{ myvar }}:
   file.blockreplace:
     - name: /usr/share/tomcat/webapps/ROOT/WEB-INF/jsp/login.jsp
@@ -39,7 +39,7 @@ addenvtexttologin-{{ myvar }}-accumulated3:
 append_newuser_js:
   file.append:
     - name: /usr/share/tomcat/webapps/ROOT/public/resources/js/newuser.js
-    - source: salt://files/customization/newuser.js
+    - source: salt://files/customize/newuser.js
 
 form_jsp_add_script:
   file.replace:
@@ -48,4 +48,4 @@ form_jsp_add_script:
     - count: 1
     - repl: |{% raw %}
                 maxlength="<%=loopConfiguration.getMaximumLength()%>"
-                                <%if((loopConfiguration.getName().equals("sn"))||(loopConfiguration.getName().equals("initials"))||(loopConfiguration.getName().equals("givenName"))){%> onblur='autoGen(this.form.givenName.value, this.form.initials.value, this.form.sn.value)'<%}%>/>{% endraw %}
+                                <%if((loopConfiguration.getName().equals("sn"))||(loopConfiguration.getName().equals("initials"))||(loopConfiguration.getName().equals("givenName"))){% > onblur='autoGen(this.form.givenName.value, this.form.initials.value, this.form.sn.value)'< %}%>/>{% endraw %}
