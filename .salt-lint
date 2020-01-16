@@ -1,0 +1,7 @@
+---
+exclude_paths: []
+rules: {}
+skip_list:
+  - 204  # Lines should be no longer that 160 chars
+tags: []
+verbosity: 1
