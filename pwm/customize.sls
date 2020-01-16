@@ -48,4 +48,4 @@ form_jsp_add_script:
     - count: 1
     - repl: |{% raw %}
                 maxlength="<%=loopConfiguration.getMaximumLength()%>"
-                                <%if((loopConfiguration.getName().equals("sn"))||(loopConfiguration.getName().equals("initials"))||(loopConfiguration.getName().equals("givenName"))){% > onblur='autoGen(this.form.givenName.value, this.form.initials.value, this.form.sn.value)'< %}%>/>{% endraw %}
+                                <%if((loopConfiguration.getName().equals("sn"))||(loopConfiguration.getName().equals("initials"))||(loopConfiguration.getName().equals("givenName"))){%> onblur='autoGen(this.form.givenName.value, this.form.initials.value, this.form.sn.value)'<%}%>/>{% endraw %} # noqa: 202
