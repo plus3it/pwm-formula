@@ -1,0 +1,6 @@
+{%for server, ports in salt.pillar.get('pwm:lookup:ses_servers_and_ports', {}).items()%}
+{%for port in ports%}
+[{{server}}]:{{port}} {{ salt.pillar.get('pwm:lookup:ses_akid') }}:{{ salt.pillar.get('pwm:lookup:ses_secret_key') }}
+{%endfor%}
+{%endfor%}
+# [localhost]:2525 {{ salt.pillar.get('pwm:lookup:ses_akid') }}:{{ salt.pillar.get('pwm:lookup:ses_secret_key') }}

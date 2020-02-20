@@ -1,0 +1,22 @@
+pwm:
+  lookup:
+    # email address pwm uses to send email
+    pwm_email: pwm@example.com
+    enable_ost_integration: 1
+    environment_name: EXAMPLE
+    config_bucket: s3_bucket
+
+    #### OSTicket INTEGRATION CONFIG ###
+    ost_url: https://osticket.example.com
+    ostapikey: PUTyourAPIkeyHERE
+
+    ### AWS SES INTEGRATION CONFIG ###
+    ses_servers_and_ports:
+        email-smtp.us-east-1.amazonaws.com:
+            - 25
+            - 587
+        email-smtp.us-west-2.amazonaws.com:
+            - 25
+            - 587
+    ses_akid: PUTyourAKIDhere
+    ses_secret_key: PUTyourSECRETkeyHERE
