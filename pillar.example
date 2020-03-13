@@ -1,14 +1,14 @@
 pwm:
   lookup:
-    # email address pwm uses to send email
+    ### PWM Config ###
     pwm_email: pwm@example.com
-    enable_ost_integration: 1
-    environment_name: EXAMPLE
-    config_bucket: s3_bucket
+    environment_name: PWM
+    config_bucket: s3-bucket
 
-    #### OSTicket INTEGRATION CONFIG ###
+    ### OSTicket INTEGRATION CONFIG ###
+    enable_ost_integration: 1
     ost_url: https://osticket.example.com
-    ostapikey: PUTyourAPIkeyHERE
+    ost_api_key: PUTyourAPIkeyHERE
 
     ### AWS SES INTEGRATION CONFIG ###
     ses_servers_and_ports:
