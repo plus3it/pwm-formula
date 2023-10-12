@@ -15,7 +15,7 @@ jobs:
           - 7
           - 8
         salt_state:
-          - pwm-formula
+          - pwm.iptables
         salt_pillar_root:
           - ./tests/pillar/test-empty
     with:
